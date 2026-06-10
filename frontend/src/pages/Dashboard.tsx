@@ -250,7 +250,7 @@ export default function Dashboard() {
   
   const [dataLoading, setDataLoading]     = useState(true);
   const [summary,     setSummary]         = useState<Summary>(MOCK_SUMMARY);
-  const [_dormantRepos,setDormantRepos]    = useState<DormantRepo[]>(MOCK_DORMANT);
+  // const [_dormantRepos,setDormantRepos]    = useState<DormantRepo[]>(MOCK_DORMANT);
   const [recommendations,setRecommendations] = useState<Rec[]>(MOCK_RECS);
   const [health,      setHealth]          = useState<Health[]>(MOCK_HEALTH);
   const [findings,    setFindings]        = useState<Finding[]>(MOCK_FINDINGS);
