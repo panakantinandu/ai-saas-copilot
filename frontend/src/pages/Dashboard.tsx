@@ -67,7 +67,7 @@ const C = {
   purple: "#a78bfa", teal: "#2dd4bf", orange: "#fb923c", cyan: "#06b6d4",
 };
 
-const pill = (color: string, bg: string, _text: string) => ({
+const pill = (color: string, bg: string) => ({
   display: "inline-flex" as const, alignItems: "center" as const, gap: 4, background: bg, color,
   padding: "3px 10px", borderRadius: 99, fontSize: 11, fontWeight: 600, letterSpacing: "0.02em", whiteSpace: "nowrap" as const,
 });
