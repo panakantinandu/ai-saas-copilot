@@ -107,7 +107,7 @@ async def exchange_code(payload: dict = Body(...)):
         value=access_token,
         httponly=True,
         secure=secure,
-        samesite="lax",
+        samesite="none",
         max_age=60 * 60 * 8,
         path="/",
     )
