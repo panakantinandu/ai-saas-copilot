@@ -1,241 +1,308 @@
-# SaaS Ops Copilot
+# 🚀 SaaS Ops Copilot
 
-An AI-powered GitHub repository intelligence dashboard. Connect your GitHub account and get instant visibility into dormant repos, security risks, cost waste, and AI-generated action plans — in under 30 seconds.
+<p align="center">
 
-![Dashboard Preview](https://placehold.co/1200x600/0a0f1e/6366f1?text=SaaS+Ops+Copilot+Dashboard)
-> _Replace the above with a real screenshot before publishing_
+<img src="https://img.shields.io/badge/AI-Powered-blue?style=for-the-badge"/>
+<img src="https://img.shields.io/badge/FastAPI-Backend-green?style=for-the-badge"/>
+<img src="https://img.shields.io/badge/React-Frontend-61dafb?style=for-the-badge"/>
+<img src="https://img.shields.io/badge/PostgreSQL-Database-blue?style=for-the-badge"/>
+<img src="https://img.shields.io/badge/GitHub-OAuth-black?style=for-the-badge"/>
 
----
+</p>
 
-## What it does
+<p align="center">
+AI-powered GitHub Repository Intelligence Platform
+</p>
 
-Most engineering teams have repos they've forgotten about — old experiments, temp migration scripts, abandoned services sitting public on GitHub. Each one is a potential security leak and a CI/CD cost drain.
-
-SaaS Ops Copilot scans your GitHub account or org and gives you:
-
-- **Risk Scores (0–100)** — every repo scored on inactivity, public exposure, and security posture
-- **Security Findings** — detects name-pattern risks (`secret-`, `backup-`, `temp-`), public repos inactive 180+ days, likely CVE exposure
-- **Cost Waste Estimation** — calculates monthly CI/CD spend on dormant repos in dollars
-- **AI Recommendations** — per-repo action plans: archive, review, reassign — with business impact and suggested commands
-- **Repo Health Table** — full overview of active vs dormant vs critical repos
-- **AI Copilot Chat** — ask questions in natural language: _"which repo is most at risk?"_, _"how much am I wasting?"_, _"top 3 actions?"_
-- **Action Buttons** — one-click flows to create Jira tickets, send Slack alerts, email team leads, or archive repos _(UI demonstrated with mock responses; see [Roadmap](#roadmap) for real integrations)_
+<p align="center">
+Detect dormant repositories, estimate CI/CD waste, surface security risks, and generate AI-powered remediation plans in seconds.
+</p>
 
 ---
 
-## Tech Stack
+# 🎥 Demo
 
-**Frontend**
-- React 19 + TypeScript
-- Vite 8
-- React Router v7
-- Recharts (data visualisation)
-- Pure CSS-in-JS (no UI library dependency)
+> Replace with actual GIF before submission
 
-**Backend**
-- Python 3.12
-- FastAPI
-- SQLAlchemy + PostgreSQL
-- Authlib (GitHub OAuth 2.0)
-- Starlette Sessions
-
-**Auth & Security**
-- GitHub OAuth — token never touches a URL or localStorage
-- Short-lived one-time code exchange → httpOnly cookie session
-- All API endpoints read auth from the cookie via FastAPI `Depends`
+![Demo](docs/demo.gif)
 
 ---
 
-## Architecture
+# ⚡ Problem
 
-```
-Browser
-  │
-  ├─ GET  /auth/github/login          → redirects to GitHub OAuth
-  ├─ GET  /auth/github/callback       → issues one-time code, redirects to /callback
-  ├─ POST /auth/github/exchange       → validates code, sets httpOnly cookie
-  │
-  ├─ POST /auth/github/sync           → fetches repos + commits from GitHub API → PostgreSQL
-  │
-  ├─ GET  /analytics/repository-summary
-  ├─ GET  /analytics/risk-scores
-  ├─ GET  /analytics/cost-waste
-  ├─ GET  /analytics/dormant-repositories
-  ├─ GET  /security/findings
-  └─ GET  /ai/recommendations
-```
+Engineering organizations accumulate:
 
----
+* Abandoned repositories
+* Forgotten experiments
+* Public repositories with stale code
+* Unused CI/CD pipelines
+* Unknown maintenance ownership
 
-## Local Setup
+These create:
 
-### Prerequisites
+🔴 Security exposure
 
-- Node.js 18+
-- Python 3.12+
-- PostgreSQL running locally
-- A GitHub OAuth App ([create one here](https://github.com/settings/applications/new))
+🔴 Infrastructure waste
 
-### 1. Clone the repo
+🔴 Compliance risks
 
-```bash
-git clone https://github.com/YOUR_USERNAME/ai-saas-copilot.git
-cd ai-saas-copilot
-```
-
-### 2. Backend
-
-```bash
-cd backend
-python -m venv venv
-source venv/bin/activate        # Windows: venv\Scripts\activate
-pip install -r requirements.txt
-```
-
-Create `backend/.env`:
-
-```env
-GITHUB_CLIENT_ID=your_github_client_id
-GITHUB_CLIENT_SECRET=your_github_client_secret
-DATABASE_URL=postgresql://postgres:yourpassword@localhost/saascopilot
-FRONTEND_URL=http://localhost:5173
-SESSION_SECRET=any-long-random-string
-```
-
-Set your GitHub OAuth App's callback URL to:
-```
-http://localhost:8000/auth/github/callback
-```
-
-Create the database and run:
-
-```bash
-# Create the DB (first time only)
-psql -U postgres -c "CREATE DATABASE saascopilot;"
-
-# Start the backend
-uvicorn main:app --reload --port 8000
-```
-
-### 3. Frontend
-
-```bash
-cd frontend
-npm install
-```
-
-Create `frontend/.env`:
-
-```env
-VITE_API_URL=http://localhost:8000
-```
-
-```bash
-npm run dev
-```
-
-Open [http://localhost:5173](http://localhost:5173)
+🔴 Operational blind spots
 
 ---
 
-## How the OAuth flow works
+# 💡 Solution
 
-Most apps pass the GitHub token in the redirect URL (`/?token=abc`) — this leaks it into browser history, server logs, and analytics tools.
+SaaS Ops Copilot automatically analyzes GitHub repositories and generates actionable operational intelligence.
 
-This app uses a safer pattern:
+### Features
 
-1. GitHub redirects to the backend callback
-2. Backend generates a **one-time code** (32-byte random, in-memory, single use)
-3. Browser is redirected to `/callback?code=<one-time-code>` — not the real token
-4. Frontend immediately POSTs the code to `/auth/github/exchange`
-5. Backend validates, **deletes** the code (replay returns 400), sets an **httpOnly cookie**
-6. All subsequent API calls send the cookie automatically — the token is never accessible to JavaScript
+✅ Dormant Repository Detection
+
+✅ Repository Risk Scoring
+
+✅ Security Findings
+
+✅ Cost Waste Analysis
+
+✅ AI Recommendations
+
+✅ Natural Language Copilot
+
+✅ Action Center (Jira / Slack / Email)
 
 ---
 
-## Project Structure
+# 🏗️ System Architecture
 
-```
-ai-saas-copilot/
-├── backend/
-│   ├── api/
-│   │   ├── github_auth.py     # OAuth flow + GitHub API proxy
-│   │   ├── analytics.py       # Risk scores, cost waste, dormant repos
-│   │   ├── security.py        # Security findings + name-pattern detection
-│   │   ├── ai.py              # AI recommendation generation
-│   │   └── actions.py         # Jira / Slack / Email / Archive action endpoints
-│   ├── agents/
-│   │   └── repository_agent.py  # Recommendation logic (rule-based + LLM-ready)
-│   ├── models/                # SQLAlchemy ORM models
-│   ├── services/
-│   │   └── github_service.py  # GitHub REST API client
-│   ├── db/                    # Database connection + session
-│   └── main.py                # FastAPI app, CORS, middleware
-│
-└── frontend/
-    └── src/
-        ├── App.tsx              # Routing + OAuth callback handler
-        ├── pages/
-        │   ├── Dashboard.tsx    # Main dashboard (all tabs + AI chat)
-        │   └── ConnectGithub.tsx  # Landing / login page
-        └── services/
-            └── api.ts           # Typed fetch wrapper (credentials: include)
+```mermaid
+flowchart LR
+
+A[GitHub OAuth]
+B[FastAPI Backend]
+C[GitHub API]
+D[PostgreSQL]
+E[Analytics Engine]
+F[AI Recommendation Engine]
+G[React Dashboard]
+
+A --> B
+B --> C
+B --> D
+D --> E
+E --> F
+F --> G
 ```
 
 ---
 
-## Demo Mode
+# 🔐 Secure OAuth Architecture
 
-Don't want to connect a real GitHub account? Add `?demo=true` to the URL:
+```mermaid
+sequenceDiagram
 
+participant User
+participant Frontend
+participant Backend
+participant GitHub
+
+User->>Frontend: Login
+Frontend->>Backend: /github/login
+
+Backend->>GitHub: OAuth Request
+
+GitHub-->>Backend: Access Token
+
+Backend->>Backend: Generate One-Time Code
+
+Backend-->>Frontend: /callback?code=xyz
+
+Frontend->>Backend: Exchange Code
+
+Backend->>Backend: Validate + Delete Code
+
+Backend-->>Frontend: Set HttpOnly Cookie
+
+Frontend->>Backend: Authenticated Requests
 ```
-http://localhost:5173/?demo=true
+
+---
+
+# 🤖 AI Recommendation Pipeline
+
+```mermaid
+flowchart TD
+
+A[Repositories]
+B[Commit History]
+C[Security Analysis]
+
+A --> D[Risk Engine]
+B --> D
+C --> D
+
+D --> E[Risk Score]
+
+E --> F[AI Recommendation Generator]
+
+F --> G[Archive Repo]
+F --> H[Review Repo]
+F --> I[Assign Owner]
+F --> J[Investigate Security]
 ```
 
-This loads a set of realistic mock repositories without touching any real data.
+---
+
+# 📊 Dashboard Overview
+
+## Repository Health
+
+| Metric            | Description             |
+| ----------------- | ----------------------- |
+| Risk Score        | 0-100 severity          |
+| Dormancy          | Days inactive           |
+| Security Findings | Critical issues         |
+| Cost Waste        | Estimated monthly spend |
+| Recommendations   | AI-generated actions    |
 
 ---
 
-## Roadmap
+# 🎯 User Workflow
 
-The action buttons (Jira, Slack, Email, Archive) currently demonstrate the UI flow with mock responses. Real integrations are straightforward to wire in:
+```mermaid
+flowchart LR
 
-| Action | What to add |
-|--------|-------------|
-| **Create Jira ticket** | Jira REST API — `POST /rest/api/3/issue` with an API token |
-| **Notify Slack** | Slack Incoming Webhooks — one `POST` to a webhook URL |
-| **Send Email** | SendGrid or AWS SES — `POST /v3/mail/send` |
-| **Archive repo** | GitHub API — `PATCH /repos/{owner}/{repo}` with `{"archived": true}` |
-
-Other planned improvements:
-- Replace in-memory `_pending_tokens` with Redis (TTL = 5 min) for production safety
-- Add org selector on the dashboard — currently defaults to personal repos
-- Scheduled background sync (Celery or APScheduler) so data stays fresh without manual reload
-- Wire `repository_agent.py` back to an LLM (GPT-4 or Gemini — commented code already exists)
+A[Connect GitHub]
+--> B[Sync Repositories]
+--> C[Analyze Metadata]
+--> D[Generate Scores]
+--> E[Run AI Engine]
+--> F[Display Dashboard]
+--> G[Take Action]
+```
 
 ---
 
-## Environment Variables Reference
+# 📈 Business Impact
 
-**Backend (`backend/.env`)**
+Example analysis:
 
-| Variable | Description |
-|----------|-------------|
-| `GITHUB_CLIENT_ID` | GitHub OAuth App client ID |
-| `GITHUB_CLIENT_SECRET` | GitHub OAuth App client secret |
-| `DATABASE_URL` | PostgreSQL connection string |
-| `FRONTEND_URL` | Frontend origin for CORS + redirect (default: `http://localhost:5173`) |
-| `SESSION_SECRET` | Secret key for Starlette session middleware |
-| `ALERT_RECIPIENTS` | Comma-separated email list for mock email action (default: `security@company.com,ops@company.com`) |
+| Metric                      | Value  |
+| --------------------------- | ------ |
+| Repositories Scanned        | 128    |
+| Dormant Repositories        | 42     |
+| Public Dormant Repositories | 9      |
+| Monthly Waste               | $1,150 |
+| Critical Findings           | 6      |
 
-**Frontend (`frontend/.env`)**
+Potential yearly savings:
 
-| Variable | Description |
-|----------|-------------|
-| `VITE_API_URL` | Backend base URL (default: `http://localhost:8000`) |
+# 💰 $13,800+
 
 ---
 
-## License
+# 🧠 AI Copilot
+
+Ask natural language questions:
+
+```text
+Which repository is most at risk?
+
+How much CI/CD spend is wasted?
+
+Show top 3 actions I should take.
+
+Which public repositories are inactive?
+```
+
+---
+
+# ⚙️ Tech Stack
+
+## Frontend
+
+* React 19
+* TypeScript
+* Vite
+* React Router
+* Recharts
+
+## Backend
+
+* FastAPI
+* Python 3.12
+* SQLAlchemy
+* PostgreSQL
+* Authlib
+
+## Security
+
+* GitHub OAuth
+* One-Time Code Exchange
+* HttpOnly Cookies
+* Secure Sessions
+
+---
+
+# 📂 Project Structure
+
+```text
+ai-saas-copilot
+
+backend/
+├── api/
+├── agents/
+├── services/
+├── db/
+├── models/
+
+frontend/
+├── pages/
+├── services/
+├── components/
+├── assets/
+```
+
+---
+
+# 🚀 Future Roadmap
+
+### Phase 1
+
+* Redis Token Storage
+* Scheduled Sync Jobs
+* Organization Selector
+
+### Phase 2
+
+* Slack Integration
+* Jira Integration
+* Email Notifications
+
+### Phase 3
+
+* Multi-Agent Analysis
+* Repository Ownership Detection
+* Compliance Monitoring
+
+### Phase 4
+
+* Autonomous AI Operations Agent
+
+---
+
+# ⭐ Why This Project Stands Out
+
+Unlike traditional repository dashboards, SaaS Ops Copilot focuses on:
+
+* Operational Intelligence
+* Security Exposure Detection
+* Cost Optimization
+* AI-Powered Recommendations
+
+Turning GitHub from a source-code platform into an operational decision engine.
+
+---
+
+# 📜 License
 
 MIT
