@@ -67,7 +67,7 @@ const C = {
   purple: "#a78bfa", teal: "#2dd4bf", orange: "#fb923c", cyan: "#06b6d4",
 };
 
-const pill = (color: string, bg: string, text: string) => ({
+const pill = (color: string, bg: string, _text: string) => ({
   display: "inline-flex" as const, alignItems: "center" as const, gap: 4, background: bg, color,
   padding: "3px 10px", borderRadius: 99, fontSize: 11, fontWeight: 600, letterSpacing: "0.02em", whiteSpace: "nowrap" as const,
 });
@@ -250,7 +250,7 @@ export default function Dashboard() {
   
   const [dataLoading, setDataLoading]     = useState(true);
   const [summary,     setSummary]         = useState<Summary>(MOCK_SUMMARY);
-  const [dormantRepos,setDormantRepos]    = useState<DormantRepo[]>(MOCK_DORMANT);
+  const [_dormantRepos,setDormantRepos]    = useState<DormantRepo[]>(MOCK_DORMANT);
   const [recommendations,setRecommendations] = useState<Rec[]>(MOCK_RECS);
   const [health,      setHealth]          = useState<Health[]>(MOCK_HEALTH);
   const [findings,    setFindings]        = useState<Finding[]>(MOCK_FINDINGS);
