@@ -98,12 +98,12 @@ async def exchange_code(payload: dict = Body(...)):
         )
 
     response = JSONResponse({"ok": True})
-
+    secure = os.environ.get("ENV") == "production"
     response.set_cookie(
         key="gh_token",
         value=access_token,
         httponly=True,
-        secure=True,
+        secure=secure,
         samesite="lax",
         max_age=60 * 60 * 8,
         path="/",
