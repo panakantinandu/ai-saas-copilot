@@ -56,7 +56,7 @@ const MOCK_COST: CostWaste = {
   total_monthly_waste_usd: 3240, total_annual_waste_usd: 38880, repo_count: 9,
   repositories: MOCK_RISK.map(r => ({ repository: r.repository, days_inactive: r.days_inactive, is_public: r.is_public, monthly_waste_usd: r.is_public ? 375 : 240, annual_waste_usd: r.is_public ? 4500 : 2880 }))
 };
-const MOCK_DORMANT: DormantRepo[] = MOCK_RISK.map(r => ({ repository: r.repository, author: r.author, days_inactive: r.days_inactive }));
+const _MOCK_DORMANT: DormantRepo[] = MOCK_RISK.map(r => ({ repository: r.repository, author: r.author, days_inactive: r.days_inactive }));
 
 // ─── Design Tokens ───────────────────────────────────────────────────────────
 const C = {
@@ -72,7 +72,7 @@ const pill = (color: string, bg: string) => ({
   padding: "3px 10px", borderRadius: 99, fontSize: 11, fontWeight: 600, letterSpacing: "0.02em", whiteSpace: "nowrap" as const,
 });
 const statusPill = (s: string) => {
-  if (s === "Critical" || s === "critical_abandoned") return pill(C.red, "#ef444420", s);
+  if (s === "Critical" || s === "critical_abandoned") return pill(C.red, "#ef444420");
   if (s === "High") return pill(C.red, "#ef444420", s);
   if (s === "Medium") return pill(C.yellow, "#f59e0b20", s);
   if (s === "Warning") return pill(C.yellow, "#f59e0b20", s);
@@ -309,7 +309,8 @@ export default function Dashboard() {
         const riskResClone = riskRes.clone();
 
         if (summaryRes.ok)  setSummary(await summaryRes.json());
-        if (dormantRes.ok)  setDormantRepos(await dormantRes.json());
+        // if (dormantRes.ok)  setDormantRepos(await dormantRes.json());
+        if (dormantRes.ok)  { /* dormant data reserved for future use */ }
         if (riskRes.ok)     setRiskScores(await riskRes.json());        // first read
         if (costRes.ok)     setCostWaste(await costRes.json());
         if (findingsRes.ok) setFindings(await findingsRes.json());
@@ -623,7 +624,7 @@ export default function Dashboard() {
                     </td>
                     <td style={{ padding: "12px 16px", width: 180 }}><RiskBar score={r.risk_score} /></td>
                     <td style={{ padding: "12px 16px", fontSize: 13, color: r.days_inactive > 180 ? C.red : C.yellow }}>{r.days_inactive}d</td>
-                    <td style={{ padding: "12px 16px" }}><span style={pill(r.is_public ? C.orange : C.muted, r.is_public ? "#fb923c20" : C.border, "")}>{r.is_public ? "Public" : "Private"}</span></td>
+                    <td style={{ padding: "12px 16px" }}><span style={pill(r.is_public ? C.orange : C.muted, r.is_public ? "#fb923c20" : C.border)}>{r.is_public ? "Public" : "Private"}</span></td>
                     <td style={{ padding: "12px 16px", fontSize: 12, color: C.muted }}>{r.author}</td>
                   </tr>
                 ))}
@@ -766,7 +767,7 @@ export default function Dashboard() {
                     <tr key={i} className="row-hover" style={{ borderTop: `1px solid ${C.border}`, transition: "background 0.1s", opacity: archivedRepos.has(r.repository) ? 0.4 : 1 }}>
                       <td style={{ padding: "11px 16px", fontSize: 13, fontWeight: 500 }}>{r.repository}</td>
                       <td style={{ padding: "11px 16px", fontSize: 13, color: r.days_inactive > 180 ? C.red : C.yellow }}>{r.days_inactive}d</td>
-                      <td style={{ padding: "11px 16px" }}><span style={pill(r.is_public ? C.orange : C.muted, r.is_public ? "#fb923c20" : C.border, "")}>{r.is_public ? "Public" : "Private"}</span></td>
+                      <td style={{ padding: "11px 16px" }}><span style={pill(r.is_public ? C.orange : C.muted, r.is_public ? "#fb923c20" : C.border)}>{r.is_public ? "Public" : "Private"}</span></td>
                       <td style={{ padding: "11px 16px", fontSize: 13, fontWeight: 600, color: C.yellow }}>${r.monthly_waste_usd}</td>
                       <td style={{ padding: "11px 16px", fontSize: 13, fontWeight: 600, color: C.red }}>${r.annual_waste_usd.toLocaleString()}</td>
                       <td style={{ padding: "11px 16px" }}>
