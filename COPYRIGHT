@@ -1,0 +1,33 @@
+SaaS Ops Copilot
+Copyright (c) 2026 Panakanti Nandu
+
+This project and all associated source code, documentation, and assets are
+the intellectual property of Panakanti Nandu.
+
+Licensed under the MIT License. See LICENSE for the full license text.
+
+-------------------------------------------------------------------------------
+
+Third-party software used in this project:
+
+BACKEND
+  - FastAPI          (MIT)      https://github.com/fastapi/fastapi
+  - SQLAlchemy       (MIT)      https://github.com/sqlalchemy/sqlalchemy
+  - Authlib          (BSD-3)    https://github.com/lepture/authlib
+  - httpx            (BSD-3)    https://github.com/encode/httpx
+  - uvicorn          (BSD-3)    https://github.com/encode/uvicorn
+  - psycopg2-binary  (LGPL-3)   https://github.com/psycopg/psycopg2
+  - pydantic         (MIT)      https://github.com/pydantic/pydantic
+  - itsdangerous     (BSD-3)    https://github.com/pallets/itsdangerous
+  - python-dotenv    (BSD-3)    https://github.com/theskumar/python-dotenv
+  - Starlette        (BSD-3)    https://github.com/encode/starlette
+
+FRONTEND
+  - React            (MIT)      https://github.com/facebook/react
+  - Vite             (MIT)      https://github.com/vitejs/vite
+  - React Router     (MIT)      https://github.com/remix-run/react-router
+  - Recharts         (MIT)      https://github.com/recharts/recharts
+  - TypeScript       (Apache-2) https://github.com/microsoft/TypeScript
+  - axios            (MIT)      https://github.com/axios/axios
+
+Each third-party library is subject to its own license terms.
