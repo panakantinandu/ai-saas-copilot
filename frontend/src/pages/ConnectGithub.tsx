@@ -56,8 +56,8 @@ export default function ConnectGithub() {
           Connect GitHub in one click. In 30 seconds, see exactly which repos are dormant, how much they're costing you, and which ones are security risks — with AI-generated action plans for each.
         </p>
         <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
-          <button className="cta" onClick={() => window.location.href = "http://localhost:8000/auth/github/login"} style={{ background: C.accent, color: "white", border: "none", borderRadius: 10, padding: "14px 28px", cursor: "pointer", fontSize: 15, fontWeight: 600, display: "flex", alignItems: "center", gap: 8 }}>
-            Connect GitHub — it's free
+          <button className="cta" onClick={() => const API = import.meta.env.VITE_API_URL ?? "http://localhost:8000"; window.location.href = `${API}/auth/github/login`;} style={{ background: C.accent, color: "white", border: "none", borderRadius: 10, padding: "14px 28px", cursor: "pointer", fontSize: 15, fontWeight: 600, display: "flex", alignItems: "center", gap: 8 }}>
+            Connect GitHub - it's free
           </button>
           <button onClick={() => window.location.href = "/?demo=true"} style={{ background: "transparent", color: C.text, border: `1px solid ${C.border}`, borderRadius: 10, padding: "14px 24px", cursor: "pointer", fontSize: 15, fontWeight: 500 }}>
             Try Demo →
@@ -97,7 +97,7 @@ export default function ConnectGithub() {
       {/* Bottom CTA */}
       <div style={{ textAlign: "center", borderTop: `1px solid ${C.border}`, padding: "48px 32px" }}>
         <p style={{ color: C.muted, fontSize: 14, marginBottom: 20 }}>Takes 30 seconds. No installation required.</p>
-        <button className="cta" onClick={() => window.location.href = "http://localhost:8000/auth/github/login"} style={{ background: C.accent, color: "white", border: "none", borderRadius: 10, padding: "13px 28px", cursor: "pointer", fontSize: 15, fontWeight: 600 }}>
+        <button className="cta" onClick={() => const API = import.meta.env.VITE_API_URL ?? "http://localhost:8000"; window.location.href = `${API}/auth/github/login`;} style={{ background: C.accent, color: "white", border: "none", borderRadius: 10, padding: "13px 28px", cursor: "pointer", fontSize: 15, fontWeight: 600 }}>
           Connect GitHub now →
         </button>
       </div>
