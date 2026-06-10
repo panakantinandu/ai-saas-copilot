@@ -1,0 +1,241 @@
+# SaaS Ops Copilot
+
+An AI-powered GitHub repository intelligence dashboard. Connect your GitHub account and get instant visibility into dormant repos, security risks, cost waste, and AI-generated action plans — in under 30 seconds.
+
+![Dashboard Preview](https://placehold.co/1200x600/0a0f1e/6366f1?text=SaaS+Ops+Copilot+Dashboard)
+> _Replace the above with a real screenshot before publishing_
+
+---
+
+## What it does
+
+Most engineering teams have repos they've forgotten about — old experiments, temp migration scripts, abandoned services sitting public on GitHub. Each one is a potential security leak and a CI/CD cost drain.
+
+SaaS Ops Copilot scans your GitHub account or org and gives you:
+
+- **Risk Scores (0–100)** — every repo scored on inactivity, public exposure, and security posture
+- **Security Findings** — detects name-pattern risks (`secret-`, `backup-`, `temp-`), public repos inactive 180+ days, likely CVE exposure
+- **Cost Waste Estimation** — calculates monthly CI/CD spend on dormant repos in dollars
+- **AI Recommendations** — per-repo action plans: archive, review, reassign — with business impact and suggested commands
+- **Repo Health Table** — full overview of active vs dormant vs critical repos
+- **AI Copilot Chat** — ask questions in natural language: _"which repo is most at risk?"_, _"how much am I wasting?"_, _"top 3 actions?"_
+- **Action Buttons** — one-click flows to create Jira tickets, send Slack alerts, email team leads, or archive repos _(UI demonstrated with mock responses; see [Roadmap](#roadmap) for real integrations)_
+
+---
+
+## Tech Stack
+
+**Frontend**
+- React 19 + TypeScript
+- Vite 8
+- React Router v7
+- Recharts (data visualisation)
+- Pure CSS-in-JS (no UI library dependency)
+
+**Backend**
+- Python 3.12
+- FastAPI
+- SQLAlchemy + PostgreSQL
+- Authlib (GitHub OAuth 2.0)
+- Starlette Sessions
+
+**Auth & Security**
+- GitHub OAuth — token never touches a URL or localStorage
+- Short-lived one-time code exchange → httpOnly cookie session
+- All API endpoints read auth from the cookie via FastAPI `Depends`
+
+---
+
+## Architecture
+
+```
+Browser
+  │
+  ├─ GET  /auth/github/login          → redirects to GitHub OAuth
+  ├─ GET  /auth/github/callback       → issues one-time code, redirects to /callback
+  ├─ POST /auth/github/exchange       → validates code, sets httpOnly cookie
+  │
+  ├─ POST /auth/github/sync           → fetches repos + commits from GitHub API → PostgreSQL
+  │
+  ├─ GET  /analytics/repository-summary
+  ├─ GET  /analytics/risk-scores
+  ├─ GET  /analytics/cost-waste
+  ├─ GET  /analytics/dormant-repositories
+  ├─ GET  /security/findings
+  └─ GET  /ai/recommendations
+```
+
+---
+
+## Local Setup
+
+### Prerequisites
+
+- Node.js 18+
+- Python 3.12+
+- PostgreSQL running locally
+- A GitHub OAuth App ([create one here](https://github.com/settings/applications/new))
+
+### 1. Clone the repo
+
+```bash
+git clone https://github.com/YOUR_USERNAME/ai-saas-copilot.git
+cd ai-saas-copilot
+```
+
+### 2. Backend
+
+```bash
+cd backend
+python -m venv venv
+source venv/bin/activate        # Windows: venv\Scripts\activate
+pip install -r requirements.txt
+```
+
+Create `backend/.env`:
+
+```env
+GITHUB_CLIENT_ID=your_github_client_id
+GITHUB_CLIENT_SECRET=your_github_client_secret
+DATABASE_URL=postgresql://postgres:yourpassword@localhost/saascopilot
+FRONTEND_URL=http://localhost:5173
+SESSION_SECRET=any-long-random-string
+```
+
+Set your GitHub OAuth App's callback URL to:
+```
+http://localhost:8000/auth/github/callback
+```
+
+Create the database and run:
+
+```bash
+# Create the DB (first time only)
+psql -U postgres -c "CREATE DATABASE saascopilot;"
+
+# Start the backend
+uvicorn main:app --reload --port 8000
+```
+
+### 3. Frontend
+
+```bash
+cd frontend
+npm install
+```
+
+Create `frontend/.env`:
+
+```env
+VITE_API_URL=http://localhost:8000
+```
+
+```bash
+npm run dev
+```
+
+Open [http://localhost:5173](http://localhost:5173)
+
+---
+
+## How the OAuth flow works
+
+Most apps pass the GitHub token in the redirect URL (`/?token=abc`) — this leaks it into browser history, server logs, and analytics tools.
+
+This app uses a safer pattern:
+
+1. GitHub redirects to the backend callback
+2. Backend generates a **one-time code** (32-byte random, in-memory, single use)
+3. Browser is redirected to `/callback?code=<one-time-code>` — not the real token
+4. Frontend immediately POSTs the code to `/auth/github/exchange`
+5. Backend validates, **deletes** the code (replay returns 400), sets an **httpOnly cookie**
+6. All subsequent API calls send the cookie automatically — the token is never accessible to JavaScript
+
+---
+
+## Project Structure
+
+```
+ai-saas-copilot/
+├── backend/
+│   ├── api/
+│   │   ├── github_auth.py     # OAuth flow + GitHub API proxy
+│   │   ├── analytics.py       # Risk scores, cost waste, dormant repos
+│   │   ├── security.py        # Security findings + name-pattern detection
+│   │   ├── ai.py              # AI recommendation generation
+│   │   └── actions.py         # Jira / Slack / Email / Archive action endpoints
+│   ├── agents/
+│   │   └── repository_agent.py  # Recommendation logic (rule-based + LLM-ready)
+│   ├── models/                # SQLAlchemy ORM models
+│   ├── services/
+│   │   └── github_service.py  # GitHub REST API client
+│   ├── db/                    # Database connection + session
+│   └── main.py                # FastAPI app, CORS, middleware
+│
+└── frontend/
+    └── src/
+        ├── App.tsx              # Routing + OAuth callback handler
+        ├── pages/
+        │   ├── Dashboard.tsx    # Main dashboard (all tabs + AI chat)
+        │   └── ConnectGithub.tsx  # Landing / login page
+        └── services/
+            └── api.ts           # Typed fetch wrapper (credentials: include)
+```
+
+---
+
+## Demo Mode
+
+Don't want to connect a real GitHub account? Add `?demo=true` to the URL:
+
+```
+http://localhost:5173/?demo=true
+```
+
+This loads a set of realistic mock repositories without touching any real data.
+
+---
+
+## Roadmap
+
+The action buttons (Jira, Slack, Email, Archive) currently demonstrate the UI flow with mock responses. Real integrations are straightforward to wire in:
+
+| Action | What to add |
+|--------|-------------|
+| **Create Jira ticket** | Jira REST API — `POST /rest/api/3/issue` with an API token |
+| **Notify Slack** | Slack Incoming Webhooks — one `POST` to a webhook URL |
+| **Send Email** | SendGrid or AWS SES — `POST /v3/mail/send` |
+| **Archive repo** | GitHub API — `PATCH /repos/{owner}/{repo}` with `{"archived": true}` |
+
+Other planned improvements:
+- Replace in-memory `_pending_tokens` with Redis (TTL = 5 min) for production safety
+- Add org selector on the dashboard — currently defaults to personal repos
+- Scheduled background sync (Celery or APScheduler) so data stays fresh without manual reload
+- Wire `repository_agent.py` back to an LLM (GPT-4 or Gemini — commented code already exists)
+
+---
+
+## Environment Variables Reference
+
+**Backend (`backend/.env`)**
+
+| Variable | Description |
+|----------|-------------|
+| `GITHUB_CLIENT_ID` | GitHub OAuth App client ID |
+| `GITHUB_CLIENT_SECRET` | GitHub OAuth App client secret |
+| `DATABASE_URL` | PostgreSQL connection string |
+| `FRONTEND_URL` | Frontend origin for CORS + redirect (default: `http://localhost:5173`) |
+| `SESSION_SECRET` | Secret key for Starlette session middleware |
+| `ALERT_RECIPIENTS` | Comma-separated email list for mock email action (default: `security@company.com,ops@company.com`) |
+
+**Frontend (`frontend/.env`)**
+
+| Variable | Description |
+|----------|-------------|
+| `VITE_API_URL` | Backend base URL (default: `http://localhost:8000`) |
+
+---
+
+## License
+
+MIT
