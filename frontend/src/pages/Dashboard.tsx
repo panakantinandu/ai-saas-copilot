@@ -1,6 +1,10 @@
 import { useEffect, useState, useRef } from "react";
 const BASE_URL = (import.meta as any).env?.VITE_API_URL ?? "http://localhost:8000";
-
+const token = sessionStorage.getItem("gh_token") ?? "";
+const authHeaders = {
+  "Content-Type": "application/json",
+  "X-Auth-Token": token,
+};
 // ─── Types ──────────────────────────────────────────────────────────────────
 interface Summary { total_repositories: number; dormant_repositories: number; active_repositories: number; critical_repositories: number; public_repositories: number; estimated_monthly_waste: number; }
 interface DormantRepo { repository: string; author: string; days_inactive: number; }
@@ -161,12 +165,17 @@ function ActionModal({ repo, action, onClose }: { repo: Rec | null; action: stri
   const handleRun = async () => {
     setLoading(true);
     try {
-      await fetch(`${BASE_URL}/actions/${action}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({ repository: repo.repository, priority: "High", message: "" })
+      // await fetch(`${BASE_URL}/actions/${action}`, {
+      //   method: "POST",
+      //   headers: { "Content-Type": "application/json" },
+      //   credentials: "include",
+      //   body: JSON.stringify({ repository: repo.repository, priority: "High", message: "" })
         
+      // });
+      await fetch(`${BASE_URL}/auth/github/sync`, {
+        method: "POST",
+        headers: authHeaders,
+        body: JSON.stringify({}),
       });
     } catch (_) {
       // backend may be offline; proceed with mock result anyway
@@ -176,6 +185,9 @@ function ActionModal({ repo, action, onClose }: { repo: Rec | null; action: stri
     setDone(true);
   };
 
+  const jsonFetch = (url: string) => fetch(url, { headers: authHeaders });
+
+  
   const ACTION_META: Record<string, { label: string; color: string; icon: string; desc: string }> = {
     jira:    { label: "Create Jira Ticket", color: C.teal,   icon: "🎫", desc: "Opens a tracked task in your Jira project board" },
     email:   { label: "Generate Email",     color: C.cyan,   icon: "📧", desc: "Sends an alert to team leads and security team" },
@@ -283,10 +295,15 @@ export default function Dashboard() {
     async function loadRealData() {
       try {
         // 1. Sync the user's repos into the DB first (so analytics have real data)
+        // await fetch(`${BASE_URL}/auth/github/sync`, {
+        //   method: "POST",
+        //   headers: { "Content-Type": "application/json" },
+        //   credentials: "include",
+        //   body: JSON.stringify({}),
+        // });
         await fetch(`${BASE_URL}/auth/github/sync`, {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
-          credentials: "include",
+          headers: authHeaders,
           body: JSON.stringify({}),
         });
   
