@@ -33,14 +33,14 @@ DEMO_REPOS = [
 
 # ─── Shared auth dependency ───────────────────────────────────────────────────
 
-def _require_token(gh_token: str | None = Cookie(default=None)) -> str:
+def _require_token(token: str = Header(default=None, alias="X-Auth-Token")) -> str:
     """Reads the GitHub token from the httpOnly session cookie."""
-    if not gh_token:
+    if not token:
         raise HTTPException(
             status_code=401,
             detail="Not authenticated — please log in again"
         )
-    return gh_token
+    return token
 
 
 # ─── OAuth flow ───────────────────────────────────────────────────────────────
@@ -100,19 +100,20 @@ async def exchange_code(payload: dict = Body(...)):
             detail="Invalid or expired code"
         )
 
-    response = JSONResponse({"ok": True})
-    secure = os.environ.get("ENV") == "production"
-    response.set_cookie(
-        key="gh_token",
-        value=access_token,
-        httponly=True,
-        secure=secure,
-        samesite="none",
-        max_age=60 * 60 * 8,
-        path="/",
-    )
+    # response = JSONResponse({"ok": True})
+    # secure = os.environ.get("ENV") == "production"
+    # response.set_cookie(
+    #     key="gh_token",
+    #     value=access_token,
+    #     httponly=True,
+    #     secure=secure,
+    #     samesite="none",
+    #     max_age=60 * 60 * 8,
+    #     path="/",
+    # )
 
-    return response
+    # return response
+    return {"token": access_token}
 
 
 @router.post("/github/logout")
@@ -124,9 +125,9 @@ async def logout():
 
 
 @router.get("/github/me/session")
-async def session_check(gh_token: str | None = Cookie(default=None)):
+async def session_check(token: str = Header(default=None, alias="X-Auth-Token")):
     """Returns 401 if no valid session cookie is present."""
-    if not gh_token:
+    if not token:
         raise HTTPException(
             status_code=401,
             detail="Not authenticated"
