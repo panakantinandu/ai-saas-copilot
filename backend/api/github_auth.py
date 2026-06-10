@@ -48,7 +48,10 @@ def _require_token(gh_token: str | None = Cookie(default=None)) -> str:
 @router.get("/github/login")
 async def github_login(request: Request):
     try:
-        redirect_uri = request.url_for("github_callback")
+        redirect_uri = os.environ.get(
+            "GITHUB_CALLBACK_URL",
+            "http://localhost:8000/auth/github/callback"
+        )
         return await oauth.github.authorize_redirect(request, redirect_uri)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
