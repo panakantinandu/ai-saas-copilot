@@ -13,6 +13,6 @@ oauth.register(
     authorize_url="https://github.com/login/oauth/authorize",
     api_base_url="https://api.github.com/",
     client_kwargs={
-        "scope": "read:user read:org"
+        "scope": "read:user read:org read:org repo"
     }
 )
