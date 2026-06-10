@@ -1,8 +1,14 @@
+const API_URL = (import.meta as any).env?.VITE_API_URL ?? "http://localhost:8000";
+
 export default function ConnectGithub() {
   const C = {
     bg: "#0a0f1e", surface: "#0f172a", card: "#131c2e",
     border: "#1e2d45", text: "#e2e8f0", muted: "#64748b",
     accent: "#6366f1", green: "#22c55e", yellow: "#f59e0b", red: "#ef4444",
+  };
+
+  const handleConnect = () => {
+    window.location.href = `${API_URL}/auth/github/login`;
   };
 
   const features = [
@@ -18,10 +24,7 @@ export default function ConnectGithub() {
     { value: "$4,500", label: "avg monthly waste per 20-repo org" },
     { value: "18/20", label: "of your repos are likely dormant right now" },
   ];
-  const API = import.meta.env.VITE_API_URL ?? "http://localhost:8000";
-  const handleConnect = () => {
-    window.location.href = `${API_URL}/auth/github/login`;
-  };
+
   return (
     <div style={{ minHeight: "100vh", background: C.bg, color: C.text, fontFamily: "'Inter','Segoe UI',sans-serif" }}>
       <style>{`
@@ -59,7 +62,7 @@ export default function ConnectGithub() {
           Connect GitHub in one click. In 30 seconds, see exactly which repos are dormant, how much they're costing you, and which ones are security risks — with AI-generated action plans for each.
         </p>
         <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
-          <button className="cta" onClick={() => handleConnect;} style={{ background: C.accent, color: "white", border: "none", borderRadius: 10, padding: "14px 28px", cursor: "pointer", fontSize: 15, fontWeight: 600, display: "flex", alignItems: "center", gap: 8 }}>
+          <button className="cta" onClick={handleConnect} style={{ background: C.accent, color: "white", border: "none", borderRadius: 10, padding: "14px 28px", cursor: "pointer", fontSize: 15, fontWeight: 600, display: "flex", alignItems: "center", gap: 8 }}>
             Connect GitHub - it's free
           </button>
           <button onClick={() => window.location.href = "/?demo=true"} style={{ background: "transparent", color: C.text, border: `1px solid ${C.border}`, borderRadius: 10, padding: "14px 24px", cursor: "pointer", fontSize: 15, fontWeight: 500 }}>
@@ -100,7 +103,7 @@ export default function ConnectGithub() {
       {/* Bottom CTA */}
       <div style={{ textAlign: "center", borderTop: `1px solid ${C.border}`, padding: "48px 32px" }}>
         <p style={{ color: C.muted, fontSize: 14, marginBottom: 20 }}>Takes 30 seconds. No installation required.</p>
-        <button className="cta" onClick={() => handleConnect;} style={{ background: C.accent, color: "white", border: "none", borderRadius: 10, padding: "13px 28px", cursor: "pointer", fontSize: 15, fontWeight: 600 }}>
+        <button className="cta" onClick={handleConnect} style={{ background: C.accent, color: "white", border: "none", borderRadius: 10, padding: "13px 28px", cursor: "pointer", fontSize: 15, fontWeight: 600 }}>
           Connect GitHub now →
         </button>
       </div>
