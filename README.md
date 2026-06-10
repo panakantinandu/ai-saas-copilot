@@ -23,7 +23,7 @@ Detect dormant repositories, estimate CI/CD waste, surface security risks, and g
 
 # 🎥 Demo
 
-> Replace with actual GIF before submission
+<img width="726" height="906" alt="image" src="https://github.com/user-attachments/assets/55a2126c-8464-4f49-80dc-170e1b7837ae" />
 
 ![Demo](docs/demo.gif)
 
