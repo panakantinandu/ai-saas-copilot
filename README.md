@@ -22,7 +22,7 @@ Detect dormant repositories, estimate CI/CD waste, surface security risks, and g
 ---
 
 #  Demo
-<Opening Page
+> Opening Page
 <img width="726" height="906" alt="image" src="https://github.com/user-attachments/assets/55a2126c-8464-4f49-80dc-170e1b7837ae" />
 
 > Dashboard
@@ -48,9 +48,6 @@ Detect dormant repositories, estimate CI/CD waste, surface security risks, and g
 
 
 
-
-
-![Demo](docs/demo.gif)
 
 ---
 
