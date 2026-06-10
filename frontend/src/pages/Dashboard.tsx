@@ -56,7 +56,7 @@ const MOCK_COST: CostWaste = {
   total_monthly_waste_usd: 3240, total_annual_waste_usd: 38880, repo_count: 9,
   repositories: MOCK_RISK.map(r => ({ repository: r.repository, days_inactive: r.days_inactive, is_public: r.is_public, monthly_waste_usd: r.is_public ? 375 : 240, annual_waste_usd: r.is_public ? 4500 : 2880 }))
 };
-const _MOCK_DORMANT: DormantRepo[] = MOCK_RISK.map(r => ({ repository: r.repository, author: r.author, days_inactive: r.days_inactive }));
+// const _MOCK_DORMANT: DormantRepo[] = MOCK_RISK.map(r => ({ repository: r.repository, author: r.author, days_inactive: r.days_inactive }));
 
 // ─── Design Tokens ───────────────────────────────────────────────────────────
 const C = {
@@ -67,7 +67,7 @@ const C = {
   purple: "#a78bfa", teal: "#2dd4bf", orange: "#fb923c", cyan: "#06b6d4",
 };
 
-const pill = (color: string, bg: string) => ({
+const pill = (color: string, bg: string, _label?: string) => ({
   display: "inline-flex" as const, alignItems: "center" as const, gap: 4, background: bg, color,
   padding: "3px 10px", borderRadius: 99, fontSize: 11, fontWeight: 600, letterSpacing: "0.02em", whiteSpace: "nowrap" as const,
 });
