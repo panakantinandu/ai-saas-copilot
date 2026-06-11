@@ -30,9 +30,16 @@ function OAuthCallback() {
       })
       .then(data => {
         // Store token in sessionStorage — lives until browser tab closes
+        // sessionStorage.setItem("gh_token", data.token);
+        // window.history.replaceState({}, "", "/");
+        // window.location.replace("/");
+        console.log("Exchange response:", data);
         sessionStorage.setItem("gh_token", data.token);
-        window.history.replaceState({}, "", "/");
-        window.location.replace("/");
+        // Small delay to ensure sessionStorage write commits before reload
+        setTimeout(() => {
+          window.history.replaceState({}, "", "/");
+          window.location.replace("/");
+        }, 100);
       })
       .catch(() => setStatus("error"));
   }, []);
