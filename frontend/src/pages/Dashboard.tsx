@@ -1,6 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-// const BASE_URL = (import.meta as any).env?.VITE_API_URL ?? "http://localhost:8000";
-const BASE_URL = (import.meta as any).env?.VITE_API_URL ?? "/_/backend";
+const BASE_URL = (import.meta as any).env?.VITE_API_URL ?? "http://localhost:8000";
 const token = sessionStorage.getItem("gh_token") ?? "";
 const authHeaders = {
   "Content-Type": "application/json",
