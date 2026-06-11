@@ -65,22 +65,27 @@ async def github_callback(request: Request):
     frontend. The real GitHub token never appears in a URL.
     """
     try:
+        # token = await oauth.github.authorize_access_token(request)
+        # access_token = token["access_token"]
+
+        # code = secrets.token_urlsafe(32)  # 256-bit random, one-time use
+        # _pending_tokens[code] = access_token
+
+        # frontend_url = os.environ.get(
+        #     # "FRONTEND_URL",
+        #     # "http://localhost:5173"
+        #     "FRONTEND_URL",
+        #     "https://ai-saas-copilot.vercel.app"
+        # )
+
+        # return RedirectResponse(
+        #     url=f"{frontend_url}/callback?code={code}"
+        # )
         token = await oauth.github.authorize_access_token(request)
         access_token = token["access_token"]
-
-        code = secrets.token_urlsafe(32)  # 256-bit random, one-time use
-        _pending_tokens[code] = access_token
-
-        frontend_url = os.environ.get(
-            # "FRONTEND_URL",
-            # "http://localhost:5173"
-            "FRONTEND_URL",
-            "https://ai-saas-copilot.vercel.app"
-        )
-
-        return RedirectResponse(
-            url=f"{frontend_url}/callback?code={code}"
-        )
+        
+        frontend_url = os.environ.get("FRONTEND_URL", "http://localhost:5173")
+        return RedirectResponse(url=f"{frontend_url}/callback?token={access_token}")
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
