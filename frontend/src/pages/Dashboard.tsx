@@ -185,7 +185,7 @@ function ActionModal({ repo, action, onClose }: { repo: Rec | null; action: stri
     setDone(true);
   };
 
-  const jsonFetch = (url: string) => fetch(url, { headers: authHeaders });
+  // const jsonFetch = (url: string) => fetch(url, { headers: authHeaders });
 
   
   const ACTION_META: Record<string, { label: string; color: string; icon: string; desc: string }> = {
