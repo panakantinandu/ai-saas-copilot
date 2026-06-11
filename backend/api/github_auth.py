@@ -1,7 +1,7 @@
 import os
 import secrets
 from datetime import datetime, timedelta
-from fastapi import APIRouter, Request, Body, Depends, HTTPException, Cookie
+from fastapi import APIRouter, Request, Body, Depends, HTTPException, Cookie, Header
 from fastapi.responses import RedirectResponse, JSONResponse
 from sqlalchemy.orm import Session
 from core.oauth import oauth
