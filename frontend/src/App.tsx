@@ -26,7 +26,7 @@ function OAuthCallback() {
         if (!data.token) throw new Error("No token in response");
         sessionStorage.setItem("gh_token", data.token);
         // Navigate to dashboard — no full reload needed
-        window.location.href = "/";
+        window.location.href = "/dashboard";
       })
       .catch(err => {
         console.error("Exchange error:", err);
