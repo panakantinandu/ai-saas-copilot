@@ -42,7 +42,7 @@ export default function ConnectGithub() {
         </div>
         <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
           <div style={{ width: 7, height: 7, borderRadius: "50%", background: C.green, animation: "pulse 2s infinite" }} />
-          <span style={{ fontSize: 12, color: C.muted }}>AI-Powered · Free at buildathon</span>
+          <span style={{ fontSize: 12, color: C.muted }}>AI-Powered</span>
         </div>
       </div>
 
