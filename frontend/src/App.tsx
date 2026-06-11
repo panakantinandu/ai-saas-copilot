@@ -10,28 +10,33 @@ function OAuthCallback() {
   const [status, setStatus] = useState<"loading" | "error">("loading");
 
   useEffect(() => {
-    const code = new URLSearchParams(window.location.search).get("code");
-    if (!code) { setStatus("error"); return; }
+    // const code = new URLSearchParams(window.location.search).get("code");
+    // if (!code) { setStatus("error"); return; }
 
-    fetch(`${BASE_URL}/auth/github/exchange`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ code }),
-    })
-      .then(res => {
-        if (!res.ok) throw new Error("Exchange failed");
-        return res.json();
-      })
-      .then(data => {
-        if (!data.token) throw new Error("No token in response");
-        sessionStorage.setItem("gh_token", data.token);
-        // Navigate to dashboard — no full reload needed
-        window.location.href = "/dashboard?authed=true";
-      })
-      .catch(err => {
-        console.error("Exchange error:", err);
-        setStatus("error");
-      });
+    // fetch(`${BASE_URL}/auth/github/exchange`, {
+    //   method: "POST",
+    //   headers: { "Content-Type": "application/json" },
+    //   body: JSON.stringify({ code }),
+    // })
+    //   .then(res => {
+    //     if (!res.ok) throw new Error("Exchange failed");
+    //     return res.json();
+    //   })
+    //   .then(data => {
+    //     if (!data.token) throw new Error("No token in response");
+    //     sessionStorage.setItem("gh_token", data.token);
+    //     // Navigate to dashboard — no full reload needed
+    //     window.location.href = "/dashboard?authed=true";
+    //   })
+    //   .catch(err => {
+    //     console.error("Exchange error:", err);
+    //     setStatus("error");
+    //   });
+    const token = new URLSearchParams(window.location.search).get("token");
+    if (!token) { setStatus("error"); return; }
+    
+    sessionStorage.setItem("gh_token", token);
+    window.location.href = "/dashboard?authed=true";
   }, []);
 
   if (status === "error") {
