@@ -1,5 +1,6 @@
 import os
-
+from db.database import engine, Base
+from models import repository, commit, activity, integration, ai_recommendation  # import all models
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.sessions import SessionMiddleware
@@ -10,7 +11,7 @@ from api.recommendations import router as recommendation_router
 from api.health import router as health_router
 from api.security import router as security_router
 from api.ai import router as ai_router
-
+Base.metadata.create_all(bind=engine)
 app = FastAPI(title="SaaS Ops Copilot", version="2.0")
 
 app.add_middleware(SessionMiddleware, secret_key=os.environ.get("SESSION_SECRET", "change-me"))
