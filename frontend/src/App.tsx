@@ -3,8 +3,8 @@ import { useEffect, useState } from "react";
 import Dashboard from "./pages/Dashboard";
 import ConnectGithub from "./pages/ConnectGithub";
 
-const BASE_URL = (import.meta as any).env?.VITE_API_URL ?? "http://localhost:8000";
-
+// const BASE_URL = (import.meta as any).env?.VITE_API_URL ?? "http://localhost:8000";
+const BASE_URL = (import.meta as any).env?.VITE_API_URL ?? "/_/backend";
 // ─── OAuth Callback ───────────────────────────────────────────────────────────
 function OAuthCallback() {
   const [status, setStatus] = useState<"loading" | "error">("loading");
