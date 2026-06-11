@@ -11,8 +11,7 @@ import ConnectGithub from "./pages/ConnectGithub";
 // httpOnly cookie and redirects to the dashboard. The real token is never
 // stored in localStorage or visible in the URL.
 
-// const BASE_URL = (import.meta as any).env?.VITE_API_URL ?? "http://localhost:8000";
-const BASE_URL = (window as any).__API_URL__ || "http://localhost:8000";
+const BASE_URL = (import.meta as any).env?.VITE_API_URL ?? "http://localhost:8000";
 function OAuthCallback() {
   const [status, setStatus] = useState<"loading" | "error">("loading");
 
