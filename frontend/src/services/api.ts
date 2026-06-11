@@ -6,7 +6,7 @@
  */
 export const BASE_URL =
   (import.meta as any).env?.VITE_API_URL ??
-  "http://localhost:8000";
+  "/_/backend";
 
 export class ApiError extends Error {
   status: number;
