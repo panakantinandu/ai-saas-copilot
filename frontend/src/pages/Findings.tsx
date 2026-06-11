@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 
 // frontend — vite.config or .env
-// const BASE_URL = import.meta.env.VITE_API_URL ?? "http://localhost:8000";
-const BASE_URL = import.meta.env.VITE_API_URL ?? "/_/backend";
+const BASE_URL = import.meta.env.VITE_API_URL ?? "http://localhost:8000";
 interface Finding {
   repository: string;
   severity: "Critical" | "High" | "Medium" | "Low";
