@@ -49,10 +49,8 @@ def _require_token(token: str = Header(default=None, alias="X-Auth-Token")) -> s
 async def github_login(request: Request):
     try:
         redirect_uri = os.environ.get(
-            # "GITHUB_CALLBACK_URL",
-            # "http://localhost:8000/auth/github/callback"
             "GITHUB_CALLBACK_URL",
-            "https://ai-saas-copilot.vercel.app/_/backend/auth/github/callback"
+            "http://localhost:8000/auth/github/callback"
         )
         return await oauth.github.authorize_redirect(request, redirect_uri)
     except Exception as e:
