@@ -48,7 +48,7 @@ const C = {
 };
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
-const pill = (color: string, bg: string, text: string) => ({
+const pill = (color: string, bg: string, _text: string) => ({
   display: "inline-flex" as const, alignItems: "center" as const,
   background: bg, color,
   padding: "2px 8px", borderRadius: 99, fontSize: 10,
@@ -219,7 +219,7 @@ export default function Dashboard() {
   const [dataLoading, setDataLoading] = useState(true);
   const [syncStatus, setSyncStatus] = useState<"idle" | "syncing" | "done" | "error">("idle");
   const [summary, setSummary] = useState<Summary | null>(null);
-  const [dormantRepos, setDormantRepos] = useState<DormantRepo[]>([]);
+  const [_dormantRepos, setDormantRepos] = useState<DormantRepo[]>([]);
   const [recommendations, setRecommendations] = useState<Rec[]>([]);
   const [health, setHealth] = useState<Health[]>([]);
   const [findings, setFindings] = useState<Finding[]>([]);
@@ -918,9 +918,3 @@ export default function Dashboard() {
     </div>
   );
 }
-
-
-//       </div>
-//     </div>
-//   );
-// }
