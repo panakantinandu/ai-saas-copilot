@@ -1,4 +1,7 @@
-const API_URL = (import.meta as any).env?.VITE_API_URL ?? "http://localhost:8000";
+// const API_URL = (import.meta as any).env?.VITE_API_URL ?? "http://localhost:8000";
+const API_URL = typeof window !== "undefined" && (window as any).__VITE_API_URL__
+  ? (window as any).__VITE_API_URL__
+  : ((import.meta as any).env?.VITE_API_URL ?? "http://localhost:8000");
 
 export default function ConnectGithub() {
   const C = {
