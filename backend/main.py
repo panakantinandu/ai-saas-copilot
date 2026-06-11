@@ -18,9 +18,10 @@ app.add_middleware(SessionMiddleware, secret_key=os.environ.get("SESSION_SECRET"
 app.add_middleware(
     CORSMiddleware,
         allow_origins=[
-        os.environ.get("FRONTEND_URL", "http://localhost:5173"),
-        "https://ai-saas-copilot.vercel.app",  # add your exact Vercel URL
-    ],
+            os.environ.get("FRONTEND_URL", "http://localhost:5173"),
+            "https://ai-saas-copilot.vercel.app",
+            "https://*.vercel.app",   # covers all preview deployments
+        ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
