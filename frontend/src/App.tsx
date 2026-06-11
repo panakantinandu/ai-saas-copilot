@@ -26,7 +26,7 @@ function OAuthCallback() {
         if (!data.token) throw new Error("No token in response");
         sessionStorage.setItem("gh_token", data.token);
         // Navigate to dashboard — no full reload needed
-        window.location.href = "/dashboard";
+        window.location.href = "/dashboard?authed=true";
       })
       .catch(err => {
         console.error("Exchange error:", err);
@@ -59,6 +59,7 @@ function OAuthCallback() {
 function AuthGate() {
   const location = useLocation();
   const isDemo = new URLSearchParams(location.search).get("demo") === "true";
+  const justAuthed = new URLSearchParams(location.search).get("authed") === "true";
   const [authed, setAuthed] = useState<boolean | null>(null);
 
   useEffect(() => {
@@ -89,7 +90,7 @@ function AuthGate() {
     );
   }
 
-  if (location.pathname === "/dashboard" || authed || isDemo) {
+ if (authed || isDemo || justAuthed) {
     return <Dashboard />;
   }
 
