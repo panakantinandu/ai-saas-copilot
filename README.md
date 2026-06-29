@@ -28,26 +28,6 @@ Detect dormant repositories, estimate CI/CD waste, surface security risks, and g
 > Dashboard
 <img width="1092" height="910" alt="image" src="https://github.com/user-attachments/assets/c524e812-c63d-4087-bd14-7c9e15749265" />
 
->Risk Scores
-<img width="1056" height="887" alt="image" src="https://github.com/user-attachments/assets/53b5c7e0-e900-4a48-8372-63ebd6ae4133" />
-
-> Security
-<img width="1067" height="910" alt="image" src="https://github.com/user-attachments/assets/79650cbb-4b88-413c-b1ca-01ef42b343e1" />
-
-> AI Insights
-<img width="1070" height="915" alt="image" src="https://github.com/user-attachments/assets/7c861358-57dc-48d0-925b-ee351faa1783" />
-
-> Cost Waste
-<img width="1053" height="902" alt="image" src="https://github.com/user-attachments/assets/6554e2d9-ca1d-4c8f-8a12-01040670e4a9" />
-
-> Repo Health
-<img width="1062" height="902" alt="image" src="https://github.com/user-attachments/assets/7e7d8763-61c9-4744-886d-b6a75b067127" />
-
-> AI Copilot
-<img width="425" height="890" alt="image" src="https://github.com/user-attachments/assets/6ba59b8f-c921-4874-b724-627f9329a036" />
-
-
-
 
 ---
 
